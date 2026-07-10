@@ -1,0 +1,14 @@
+[workspace]
+members = [
+    "contracts/identity-registry",
+    "cli/sustaina-cli",
+]
+resolver = "2"
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+
+[[bin]]
+name = "sustaina"
+path = "cli/sustaina-cli/src/main.rs"

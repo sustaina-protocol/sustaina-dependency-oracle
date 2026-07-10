@@ -1,0 +1,31 @@
+{
+  "name": "sustaina-oracle-service",
+  "version": "1.0.0",
+  "description": "Oracle service for verifying GitHub OIDC tokens and signing identity proofs",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "lint": "eslint src --ext .ts",
+    "fmt": "prettier --write \"src/**/*.ts\"",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "^12.0.0",
+    "express": "^4.18.2",
+    "jose": "^5.2.0",
+    "dotenv": "^16.4.1",
+    "pino": "^8.16.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.6",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2"
+  }
+}

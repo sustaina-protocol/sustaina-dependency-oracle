@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  oracle:
+    build:
+      context: ./oracle-service
+      dockerfile: Dockerfile
+    container_name: sustaina-oracle
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      LOG_LEVEL: debug
+      ORACLE_SECRET_KEY: ${ORACLE_SECRET_KEY}
+      STELLAR_RPC_URL: https://soroban-testnet.stellar.org
+      SOROBAN_NETWORK_PASSPHRASE: "Test SDF Network ; September 2015"
+    volumes:
+      - ./oracle-service/src:/app/src
+      - /app/node_modules
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - sustaina-network
+
+  frontend:
+    build:
+      context: ./apps/explorer-ui
+      dockerfile: Dockerfile
+    container_name: sustaina-ui
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      NEXT_PUBLIC_ORACLE_URL: http://localhost:3000
+      NEXT_PUBLIC_REGISTRY_CONTRACT: ${REGISTRY_CONTRACT_ID}
+      NEXT_PUBLIC_SOROBAN_RPC: https://soroban-testnet.stellar.org
+    volumes:
+      - ./apps/explorer-ui/src:/app/src
+      - /app/node_modules
+      - /app/.next
+    restart: unless-stopped
+    depends_on:
+      oracle:
+        condition: service_healthy
+    networks:
+      - sustaina-network
+
+networks:
+  sustaina-network:
+    driver: bridge
+
+volumes:
+  oracle_data:
+    driver: local
